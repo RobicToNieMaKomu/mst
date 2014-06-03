@@ -29,7 +29,7 @@ public class RESTResources {
 
     private static final Logger logger = Logger.getLogger(RESTResources.class);
     private static final String HTTP_HEADER = "http://";
-    private static final String SERVICE_NAME = "rest/mst/";
+    private static final String SERVICE_NAME = "/rest/mst/";
     private static final String URL_TO_RESOURCES = HTTP_HEADER + System.getenv(Constants.OPENSHIFT_APP_DNS_PROPERTY) + SERVICE_NAME;
 
     @Inject
