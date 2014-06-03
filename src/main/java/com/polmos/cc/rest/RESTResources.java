@@ -30,7 +30,7 @@ public class RESTResources {
     private static final Logger logger = Logger.getLogger(RESTResources.class);
     private static final String HTTP_HEADER = "http://";
     private static final String SERVICE_NAME = "rest/mst/";
-    private static final String URL_TO_RESOURCES = HTTP_HEADER + System.getProperty(Constants.OPENSHIFT_APP_DNS_PROPERTY) + SERVICE_NAME;
+    private static final String URL_TO_RESOURCES = HTTP_HEADER + System.getenv(Constants.OPENSHIFT_APP_DNS_PROPERTY) + SERVICE_NAME;
 
     @Inject
     private RequestProcessor processor;
@@ -59,8 +59,6 @@ public class RESTResources {
         Response response = null;
         try {
             int id = processor.processRequest(body, type);
-            logger.info("APP DNS:" + System.getProperty(Constants.OPENSHIFT_APP_DNS_PROPERTY));
-            logger.info("Full Url:" + URL_TO_RESOURCES);
             response = Response.created(new URI(URL_TO_RESOURCES + id)).build();
         } catch (IOException | URISyntaxException ex) {
             logger.error("Exception while processing REST call", ex);
