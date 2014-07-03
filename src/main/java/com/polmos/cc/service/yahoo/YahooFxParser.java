@@ -19,18 +19,14 @@ public class YahooFxParser implements FxParser {
     private static final String CURR_ID_PROPERTY = "id";
     private static final String BID_PROPERTY = "Bid";
     private static final String ASK_PROPERTY = "Ask";
-    private static final String QUERY_PROPERTY = "query";
-    private static final String RESULT_PROPERTY = "results";
-    private static final String RATE_PROPERTY = "rate";
+    private static final String RATE_PROPERTY = "rates";
 
     @Override
     public TimeWindow toFxTimeSeries(JsonObject rawTimeWindow) {
         TimeWindow output = null;
         if (rawTimeWindow != null) {
             List<ExRate> exRates = new ArrayList<>();
-            JsonObject queryJson = toQueryJson(rawTimeWindow);
-            JsonObject resultJson = toResultJson(queryJson);
-            JsonArray jsonExRates = toJsonExRates(resultJson);
+            JsonArray jsonExRates = toJsonExRates(rawTimeWindow);
             if (jsonExRates != null) {
                 for (int i = 0; i < jsonExRates.size(); i++) {
                     ExRate exRate = toExRate(jsonExRates.getJsonObject(i));
@@ -62,23 +58,7 @@ public class YahooFxParser implements FxParser {
         }
         return output;
     }
-
-    private JsonObject toQueryJson(JsonObject json) {
-        JsonObject output = null;
-        if (json != null && json.containsKey(QUERY_PROPERTY)) {
-            output = json.getJsonObject(QUERY_PROPERTY);
-        }
-        return output;
-    }
-
-    private JsonObject toResultJson(JsonObject json) {
-        JsonObject output = null;
-        if (json != null && json.containsKey(RESULT_PROPERTY)) {
-            output = json.getJsonObject(RESULT_PROPERTY);
-        }
-        return output;
-    }
-
+    
     private ExRate toExRate(JsonObject json) {
         ExRate output = null;
         if (json != null && json.containsKey(CURR_ID_PROPERTY) && json.containsKey(BID_PROPERTY) && json.containsKey(ASK_PROPERTY)) {
