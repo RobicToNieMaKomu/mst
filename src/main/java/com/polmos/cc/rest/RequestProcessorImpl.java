@@ -31,6 +31,7 @@ public class RequestProcessorImpl implements RequestProcessor {
 
     @Override
     public JsonObject processRequest(int id) throws IOException {
+        logger.info("requested graphId:" + id);
         return calculatedGraphs.getGraph(id);
     }
     
@@ -41,6 +42,7 @@ public class RequestProcessorImpl implements RequestProcessor {
         try {
             Map<String, Set<String>> mst = mstService.generateMST(input.getCurrencies(), jsonUtils.convertJsonArray(input.getTimeSeries()), input.getType());
             graphId = calculatedGraphs.putGraph(jsonUtils.convertMap(mst));
+            logger.info("produced graphId:" + graphId);
         } catch (IOException e) {
             logger.error("Exception occurred during processing mst", e);
         }
