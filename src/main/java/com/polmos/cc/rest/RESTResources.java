@@ -12,7 +12,6 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 import org.jboss.logging.Logger;
@@ -36,7 +35,7 @@ public class RESTResources {
 
     @GET
     @Path("/mst/{id}")
-    public Response getMST(@QueryParam("id") int id) {
+    public Response getMST(@PathParam("id") int id) {
         Response response = null;
         try {
             JsonObject graph = processor.processRequest(id);
