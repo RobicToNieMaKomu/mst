@@ -26,9 +26,8 @@ public class MSTServiceImpl implements MSTService {
     private FxParser parser;
 
     @Override
-    public Map<String, Set<String>> generateMST(List<JsonObject> timeSeries, OperationType type) throws IOException{
+    public Map<String, Set<String>> generateMST(List<String> currencies, List<JsonObject> timeSeries, OperationType type) throws IOException{
         logger.info("Generating MST. Size of time Series:" + ((timeSeries != null) ? timeSeries.size() : null));
-        List<String> currencies = ResourceManager.getAllKeys(BundleName.CURRENCIES);
         float[][] correlationMx = mstUtils.generateCorrelationMx(currencies, parser.toFxTimeSeries(timeSeries), type);
         float[][] distanceMx = mstUtils.convertCorrelationMxToDistanceMx(correlationMx);
         return mstUtils.constructMst(currencies, distanceMx);

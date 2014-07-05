@@ -12,5 +12,5 @@ public interface RequestProcessor {
     
     JsonObject processRequest(int id) throws IOException;
     
-    int processRequest(JsonArray rawTimeSeries, String type) throws IOException;
+    int processRequest(JsonObject body, String type) throws IOException;
 }

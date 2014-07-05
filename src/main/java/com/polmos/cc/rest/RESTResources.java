@@ -55,7 +55,7 @@ public class RESTResources {
 
     @POST
     @Path("/mst/{type}")
-    public Response createMst(final JsonArray body, @PathParam("type") String type) {
+    public Response createMst(final JsonObject body, @PathParam("type") String type) {
         Response response = null;
         try {
             int id = processor.processRequest(body, type);

@@ -12,5 +12,5 @@ import javax.json.JsonObject;
  * @author RobicToNieMaKomu
  */
 public interface MSTService {
-    Map<String, Set<String>> generateMST(List<JsonObject> timeSeries, OperationType type) throws IOException;
+    Map<String, Set<String>> generateMST(List<String> currencies, List<JsonObject> timeSeries, OperationType type) throws IOException;
 }
