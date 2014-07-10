@@ -8,11 +8,20 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.Set;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import javax.enterprise.concurrent.ManagedExecutorService;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.invocation.InvocationOnMock;
 import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.stubbing.Answer;
 
 /**
  *
@@ -23,9 +32,25 @@ public class MSTUtilsTest {
 
     private static final float DEF_ASK = 0.5f;
     private static final float DEF_BID = 0.5f;
+    
+    @Mock
+    private ManagedExecutorService executorService;
+    
     @InjectMocks
     private MSTUtils mstutils = new MSTUtilsImpl();
 
+    @Before
+    public void setup() throws InterruptedException {
+        final ExecutorService service = Executors.newFixedThreadPool(2);
+        Mockito.when(executorService.invokeAll(Mockito.anyCollection())).thenAnswer(new Answer<List<Future<CUResult>>>() {
+
+            @Override
+            public List<Future<CUResult>> answer(InvocationOnMock invocation) throws Throwable {
+                return service.invokeAll((List<CorrelationUnit>)invocation.getArguments()[0]);
+            }
+        });
+    }
+    
     @Test(expected = IOException.class)
     public void nullCorrelationMxToDistanceMxTest() throws IOException {
         mstutils.convertCorrelationMxToDistanceMx(null);

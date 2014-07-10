@@ -11,6 +11,10 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
+import javax.enterprise.concurrent.ManagedExecutorService;
+import javax.inject.Inject;
 import org.jboss.logging.Logger;
 
 /**
@@ -22,6 +26,9 @@ public class MSTUtilsImpl implements MSTUtils {
     private static final Logger logger = Logger.getLogger(MSTUtilsImpl.class);
     private static final String SEPARATOR = "$$";
     private static final String SEPARATOR_REGEX = "\\$\\$";
+    
+    @Inject
+    private ManagedExecutorService executorService;
 
     @Override
     public float[][] convertCorrelationMxToDistanceMx(float[][] correlationMx) throws IOException {
@@ -96,6 +103,7 @@ public class MSTUtilsImpl implements MSTUtils {
         if (timeSeries != null && currencySymbols != null && type != null) {
             int dimm = currencySymbols.size();
             output = new float[dimm][dimm];
+            List<CorrelationUnit> tasks = new ArrayList<>();
             for (int i = 0; i < dimm; i++) {
                 String currA = currencySymbols.get(i);
                 float avgA = averageValue(currA, timeSeries, type);
@@ -103,7 +111,7 @@ public class MSTUtilsImpl implements MSTUtils {
                     if (i != j) {
                         String currB = currencySymbols.get(j);
                         float avgB = averageValue(currB, timeSeries, type);
-                        float numerator = 0;
+                        /*float numerator = 0;
                         float sa = 0;
                         float sb = 0;
                         for (TimeWindow timeWindow : timeSeries) {
@@ -120,10 +128,27 @@ public class MSTUtilsImpl implements MSTUtils {
                         float denominator = (sa != 0 && sb != 0) ? (float) (Math.sqrt(sa) * Math.sqrt(sb)) : 1;
                         output[i][j] = numerator / denominator;
                         output[j][i] = output[i][j];
+                        */
+                        tasks.add(new CorrelationUnit(timeSeries, currA, currB, avgA, avgB, type, i, j));
                     } else {
                         output[i][j] = 1;
                     }
                 }
+            }
+            try {
+                logger.info("About to invoke" + tasks.size() + " tasks");
+                List<Future<CUResult>> results = executorService.invokeAll(tasks);
+                logger.info("Tasks invoked");
+                for (Future<CUResult> future : results) {
+                    CUResult result = future.get();
+                    int i = result.getI();
+                    int j = result.getJ();
+                    output[i][j] = result.getCorrelation();
+                    output[j][i] = output[i][j];
+                }
+                logger.info("Computation finished");
+            } catch (InterruptedException | ExecutionException ex) {
+                logger.error("Generation of MST failed", ex);
             }
         }
         return output;
