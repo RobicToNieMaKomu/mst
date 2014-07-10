@@ -31,7 +31,7 @@ public class MSTUtilsImpl implements MSTUtils {
     private static final Logger logger = Logger.getLogger(MSTUtilsImpl.class);
     private static final String SEPARATOR = "$$";
     private static final String SEPARATOR_REGEX = "\\$\\$";
-    
+
     @Resource
     private ManagedExecutorService executorService;
 
@@ -117,23 +117,23 @@ public class MSTUtilsImpl implements MSTUtils {
                         String currB = currencySymbols.get(j);
                         float avgB = averageValue(currB, timeSeries, type);
                         /*float numerator = 0;
-                        float sa = 0;
-                        float sb = 0;
-                        for (TimeWindow timeWindow : timeSeries) {
-                            ExRate exRateA = timeWindow.forCurrency(currA);
-                            ExRate exRateB = timeWindow.forCurrency(currB);
-                            if (exRateA != null && exRateB != null) {
-                                float rA = exRateA.getValue(type);
-                                float rB = exRateB.getValue(type);
-                                numerator += (rA - avgA) * (rB - avgB);
-                                sa += (rA - avgA) * (rA - avgA);
-                                sb += (rB - avgB) * (rB - avgB);
-                            }
-                        }
-                        float denominator = (sa != 0 && sb != 0) ? (float) (Math.sqrt(sa) * Math.sqrt(sb)) : 1;
-                        output[i][j] = numerator / denominator;
-                        output[j][i] = output[i][j];
-                        */
+                         float sa = 0;
+                         float sb = 0;
+                         for (TimeWindow timeWindow : timeSeries) {
+                         ExRate exRateA = timeWindow.forCurrency(currA);
+                         ExRate exRateB = timeWindow.forCurrency(currB);
+                         if (exRateA != null && exRateB != null) {
+                         float rA = exRateA.getValue(type);
+                         float rB = exRateB.getValue(type);
+                         numerator += (rA - avgA) * (rB - avgB);
+                         sa += (rA - avgA) * (rA - avgA);
+                         sb += (rB - avgB) * (rB - avgB);
+                         }
+                         }
+                         float denominator = (sa != 0 && sb != 0) ? (float) (Math.sqrt(sa) * Math.sqrt(sb)) : 1;
+                         output[i][j] = numerator / denominator;
+                         output[j][i] = output[i][j];
+                         */
                         tasks.add(new CorrelationUnit(timeSeries, currA, currB, avgA, avgB, type, i, j));
                     } else {
                         output[i][j] = 1;
@@ -141,9 +141,12 @@ public class MSTUtilsImpl implements MSTUtils {
                 }
             }
             try {
-                logger.info("About to invoke" + tasks.size() + " tasks");
-                List<Future<CUResult>> results = executorService.invokeAll(tasks);
-                logger.info("Tasks invoked");
+                logger.info("About to invoke " + tasks.size() + " tasks");
+                List<Future<CUResult>> results = new ArrayList<>();
+                for (int k = 0; k < tasks.size(); k++) {
+                    results.add(executorService.submit(tasks.get(k)));
+                    logger.info("Task invoked:" + k);
+                }
                 for (Future<CUResult> future : results) {
                     CUResult result = future.get();
                     int i = result.getI();
