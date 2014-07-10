@@ -14,6 +14,9 @@ import java.util.Set;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 import javax.annotation.Resource;
+import javax.ejb.Stateless;
+import javax.ejb.TransactionAttribute;
+import javax.ejb.TransactionAttributeType;
 import javax.enterprise.concurrent.ManagedExecutorService;
 import org.jboss.logging.Logger;
 
@@ -21,6 +24,8 @@ import org.jboss.logging.Logger;
  *
  * @author RobicToNieMaKomu
  */
+@Stateless
+@TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
 public class MSTUtilsImpl implements MSTUtils {
 
     private static final Logger logger = Logger.getLogger(MSTUtilsImpl.class);
