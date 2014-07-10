@@ -13,8 +13,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
+import javax.annotation.Resource;
 import javax.enterprise.concurrent.ManagedExecutorService;
-import javax.inject.Inject;
 import org.jboss.logging.Logger;
 
 /**
@@ -27,7 +27,7 @@ public class MSTUtilsImpl implements MSTUtils {
     private static final String SEPARATOR = "$$";
     private static final String SEPARATOR_REGEX = "\\$\\$";
     
-    @Inject
+    @Resource
     private ManagedExecutorService executorService;
 
     @Override
