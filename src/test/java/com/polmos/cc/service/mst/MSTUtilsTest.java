@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.Set;
+import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
@@ -42,11 +43,11 @@ public class MSTUtilsTest {
     @Before
     public void setup() throws InterruptedException {
         final ExecutorService service = Executors.newFixedThreadPool(2);
-        Mockito.when(executorService.invokeAll(Mockito.anyCollection())).thenAnswer(new Answer<List<Future<CUResult>>>() {
+        Mockito.when(executorService.submit(Mockito.any(Callable.class))).thenAnswer(new Answer<Future<CUResult>>() {
 
             @Override
-            public List<Future<CUResult>> answer(InvocationOnMock invocation) throws Throwable {
-                return service.invokeAll((List<CorrelationUnit>)invocation.getArguments()[0]);
+            public Future<CUResult> answer(InvocationOnMock invocation) throws Throwable {
+                return service.submit((Callable)invocation.getArguments()[0]);
             }
         });
     }

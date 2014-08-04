@@ -116,25 +116,7 @@ public class MSTUtilsImpl implements MSTUtils {
                     if (i != j) {
                         String currB = currencySymbols.get(j);
                         float avgB = averageValue(currB, timeSeries, type);
-                        /*float numerator = 0;
-                         float sa = 0;
-                         float sb = 0;
-                         for (TimeWindow timeWindow : timeSeries) {
-                         ExRate exRateA = timeWindow.forCurrency(currA);
-                         ExRate exRateB = timeWindow.forCurrency(currB);
-                         if (exRateA != null && exRateB != null) {
-                         float rA = exRateA.getValue(type);
-                         float rB = exRateB.getValue(type);
-                         numerator += (rA - avgA) * (rB - avgB);
-                         sa += (rA - avgA) * (rA - avgA);
-                         sb += (rB - avgB) * (rB - avgB);
-                         }
-                         }
-                         float denominator = (sa != 0 && sb != 0) ? (float) (Math.sqrt(sa) * Math.sqrt(sb)) : 1;
-                         output[i][j] = numerator / denominator;
-                         output[j][i] = output[i][j];
-                         */
-                        tasks.add(new CorrelationUnit(timeSeries, currA, currB, avgA, avgB, type, i, j));
+                        tasks.add(new CorrelationUnit(timeSeries, new CUParameters(currA, currB, avgA, avgB), type, i, j));
                     } else {
                         output[i][j] = 1;
                     }
@@ -143,9 +125,9 @@ public class MSTUtilsImpl implements MSTUtils {
             try {
                 logger.info("About to invoke " + tasks.size() + " tasks");
                 List<Future<CUResult>> results = new ArrayList<>();
-                for (int k = 0; k < tasks.size(); k++) {
-                    results.add(executorService.submit(tasks.get(k)));
-                    logger.info("Task invoked:" + k);
+                for (CorrelationUnit task : tasks) {
+                    // executor.invokeAll causes problems on this server
+                    results.add(executorService.submit(task)); 
                 }
                 for (Future<CUResult> future : results) {
                     CUResult result = future.get();
