@@ -1,9 +1,12 @@
 package com.polmos.cc.rest;
 
 import com.polmos.cc.constants.Constants;
+
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.concurrent.atomic.AtomicInteger;
+
 import javax.inject.Inject;
 import javax.json.JsonObject;
 import javax.ws.rs.Consumes;
@@ -14,6 +17,8 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
+
+import org.infinispan.Cache;
 import org.jboss.logging.Logger;
 
 /**
@@ -63,5 +68,22 @@ public class RESTResources {
             response = Response.status(Status.BAD_REQUEST).build();
         }
         return response;
+    }
+    
+    @Inject
+	private Cache<Integer, JsonObject> cache;
+    private final AtomicInteger ai = new AtomicInteger(0);
+    
+    @POST
+    @Path("/mst/cache")
+    public Response addToCache(final JsonObject body) {
+    	cache.put(1, body);
+    	return Response.ok().build();
+    }
+    
+    @GET
+    @Path("/mst/cache")
+    public JsonObject addToCache() {
+    	return cache.get(1);
     }
 }

@@ -1,7 +1,7 @@
 package com.polmos.cc.rest;
 
 import java.io.IOException;
-import javax.json.JsonArray;
+
 import javax.json.JsonObject;
 
 /**

@@ -1,6 +1,7 @@
 package com.polmos.cc.service.mst;
 
 import com.polmos.cc.constants.OperationType;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -12,7 +13,9 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
+
 import javax.enterprise.concurrent.ManagedExecutorService;
+
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -40,14 +43,15 @@ public class MSTUtilsTest {
     @InjectMocks
     private MSTUtils mstutils = new MSTUtilsImpl();
 
-    @Before
+    @SuppressWarnings("unchecked")
+	@Before
     public void setup() throws InterruptedException {
         final ExecutorService service = Executors.newFixedThreadPool(2);
         Mockito.when(executorService.submit(Mockito.any(Callable.class))).thenAnswer(new Answer<Future<CUResult>>() {
 
             @Override
             public Future<CUResult> answer(InvocationOnMock invocation) throws Throwable {
-                return service.submit((Callable)invocation.getArguments()[0]);
+                return service.submit((Callable<CUResult>)invocation.getArguments()[0]);
             }
         });
     }

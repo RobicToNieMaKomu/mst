@@ -50,23 +50,45 @@ public class RequestProcessorImpl implements RequestProcessor {
     }
 
     private ParsedInput validateInput(JsonObject reqBody, String type) throws IOException {
-        if (reqBody == null) {
-            throw new IOException("Null input body.");
-        }
+        throwIfBodyIsNull(reqBody);
+        
         List<String> currencies = getCurrencies(reqBody);
-        if (currencies == null || currencies.isEmpty()) {
-            throw new IOException("Invalid input. Expected at least one currency");
-        }
+        throwIfNoCurrencies(currencies);
+        
         JsonArray timeSeries = reqBody.getJsonArray("data");
-        if (timeSeries == null || timeSeries.isEmpty()) {
-            throw new IOException("Invalid input. Expected at least one time series");
-        }
+        throwIfNoTimeSeries(timeSeries);
+        
         OperationType opType = OperationType.toOperationType(type);
-        if (opType == null) {
-            throw new IOException("Invalid input. Operation type should be bid or ask");
-        }
+        throwIfOperationTypeIsNull(opType);
+        
         return new ParsedInput(opType, currencies, timeSeries);
     }
+
+	private void throwIfBodyIsNull(JsonObject reqBody) throws IOException {
+		if (reqBody == null) {
+            throw new IOException("Null input body.");
+        }
+	}
+
+	private void throwIfOperationTypeIsNull(OperationType opType)
+			throws IOException {
+		if (opType == null) {
+            throw new IOException("Invalid input. Operation type should be bid or ask");
+        }
+	}
+
+	private void throwIfNoTimeSeries(JsonArray timeSeries) throws IOException {
+		if (timeSeries == null || timeSeries.isEmpty()) {
+            throw new IOException("Invalid input. Expected at least one time series");
+        }
+	}
+
+	private void throwIfNoCurrencies(List<String> currencies)
+			throws IOException {
+		if (currencies == null || currencies.isEmpty()) {
+            throw new IOException("Invalid input. Expected at least one currency");
+        }
+	}
     
     private List<String> getCurrencies(JsonObject reqBody) {
         List<String> currencies = null;

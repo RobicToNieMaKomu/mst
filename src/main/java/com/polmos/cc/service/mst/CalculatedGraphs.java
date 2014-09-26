@@ -3,8 +3,12 @@ package com.polmos.cc.service.mst;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
+
 import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
 import javax.json.JsonObject;
+
+import org.infinispan.Cache;
 
 /**
  *
@@ -12,7 +16,7 @@ import javax.json.JsonObject;
  */
 @ApplicationScoped
 public class CalculatedGraphs {
-
+	
     private final Map<Integer, JsonObject> graphs;
     private final AtomicInteger currId;
     
