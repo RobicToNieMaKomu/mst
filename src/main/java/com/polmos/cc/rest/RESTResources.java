@@ -19,6 +19,7 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
 import org.infinispan.Cache;
+import org.infinispan.cdi.ConfigureCache;
 import org.jboss.logging.Logger;
 
 /**
@@ -71,6 +72,7 @@ public class RESTResources {
     }
     
     @Inject
+    @ConfigureCache("mst-cache")
 	private Cache<Integer, JsonObject> cache;
     private final AtomicInteger ai = new AtomicInteger(0);
     

@@ -38,7 +38,11 @@
 			<groupId>org.infinispan</groupId>
 			<artifactId>infinispan-core</artifactId>
 			<version>6.0.2.Final</version>
-			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.infinispan</groupId>
+			<artifactId>infinispan-cdi</artifactId>
+			<version>6.0.2.Final</version>
 		</dependency>
 		<dependency>
 			<groupId>org.mongodb</groupId>
