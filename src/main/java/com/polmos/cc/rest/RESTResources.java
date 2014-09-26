@@ -7,6 +7,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import javax.annotation.Resource;
 import javax.inject.Inject;
 import javax.json.JsonObject;
 import javax.ws.rs.Consumes;
@@ -71,8 +72,7 @@ public class RESTResources {
         return response;
     }
     
-    @Inject
-    @ConfigureCache("mst-cache")
+    @Resource(name = "mst-cache")
 	private Cache<Integer, JsonObject> cache;
     private final AtomicInteger ai = new AtomicInteger(0);
     
