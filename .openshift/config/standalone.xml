@@ -253,9 +253,11 @@
         <subsystem xmlns="urn:jboss:domain:infinispan:2.0">
 			<cache-container name="mst-cache" default-cache="default" module="org.wildfly.clustering.server">
                 <transport lock-timeout="60000"/>
-                <replicated-cache name="default" mode="SYNC" batching="true">
-                    <locking isolation="REPEATABLE_READ"/>
-                </replicated-cache>
+                <local-cache name="default" batching="true">
+                    <transaction mode="NONE"/>
+                    <eviction strategy="LRU" max-entries="1000"/>
+					<expiration max-idle="60000"/>
+                </local-cache>
             </cache-container>
             <cache-container name="server" aliases="singleton cluster" default-cache="default" module="org.wildfly.clustering.server">
                 <transport lock-timeout="60000"/>
