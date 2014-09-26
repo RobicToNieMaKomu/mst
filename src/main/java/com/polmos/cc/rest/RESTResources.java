@@ -1,13 +1,10 @@
 package com.polmos.cc.rest;
 
-import com.polmos.cc.constants.Constants;
-
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import javax.annotation.Resource;
 import javax.inject.Inject;
 import javax.json.JsonObject;
 import javax.ws.rs.Consumes;
@@ -20,8 +17,9 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
 import org.infinispan.Cache;
-import org.infinispan.cdi.ConfigureCache;
 import org.jboss.logging.Logger;
+
+import com.polmos.cc.constants.Constants;
 
 /**
  *
@@ -72,7 +70,7 @@ public class RESTResources {
         return response;
     }
     
-    @Resource(name = "mst-cache")
+    @Inject
 	private Cache<Integer, JsonObject> cache;
     private final AtomicInteger ai = new AtomicInteger(0);
     
