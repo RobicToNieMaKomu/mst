@@ -20,7 +20,6 @@ import org.infinispan.Cache;
 import org.jboss.logging.Logger;
 
 import com.polmos.cc.constants.Constants;
-import com.polmos.cc.service.MSTCache;
 
 /**
  *
@@ -72,7 +71,6 @@ public class RESTResources {
     }
     
     @Inject
-    @MSTCache
 	private Cache<String, JsonObject> cache;
     private final AtomicInteger ai = new AtomicInteger(0);
     
