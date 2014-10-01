@@ -251,9 +251,8 @@
             <buffer-pool name="default"/>
         </subsystem>
         <subsystem xmlns="urn:jboss:domain:infinispan:2.0">
-			<cache-container name="mst-cache" default-cache="default" module="org.wildfly.clustering.server">
-                <transport lock-timeout="60000"/>
-                <local-cache name="default" batching="true">
+			<cache-container name="mst-cache-container">
+                <local-cache name="mst-cache" batching="true">
                     <transaction mode="NONE"/>
                     <eviction strategy="LRU" max-entries="1000"/>
 					<expiration max-idle="60000"/>

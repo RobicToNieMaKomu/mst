@@ -71,19 +71,19 @@ public class RESTResources {
     }
     
     @Inject
-	private Cache<Integer, JsonObject> cache;
+	private Cache<String, JsonObject> cache;
     private final AtomicInteger ai = new AtomicInteger(0);
     
     @POST
     @Path("/mst/cache")
     public Response addToCache(final JsonObject body) {
-    	cache.put(1, body);
+    	cache.put("1", body);
     	return Response.ok().build();
     }
     
     @GET
     @Path("/mst/cache")
     public JsonObject addToCache() {
-    	return cache.get(1);
+    	return cache.get("1");
     }
 }
