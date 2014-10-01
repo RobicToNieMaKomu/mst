@@ -25,7 +25,8 @@ public class InfinispanProvider {
 		this.cacheManager = (EmbeddedCacheManager) new InitialContext().lookup("java:jboss/infinispan/container/mst-cache-container");
 	}
 	
-	@Produces
+	@Produces 
+	@MSTCache
 	public Cache<String, JsonObject> produceCache() {
 		logger.info("producing cache...");
 		return cacheManager.getCache("mst-cache");
