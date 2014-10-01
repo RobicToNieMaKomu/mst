@@ -1,13 +1,17 @@
 package com.polmos.cc.service;
 
-import javax.annotation.Resource;
+import static java.util.concurrent.TimeUnit.MINUTES;
+
+import java.util.concurrent.TimeUnit;
+
 import javax.ejb.Singleton;
 import javax.ejb.Startup;
 import javax.enterprise.inject.Produces;
-import javax.json.JsonObject;
 
-import org.infinispan.Cache;
-import org.infinispan.manager.CacheContainer;
+import org.infinispan.cdi.ConfigureCache;
+import org.infinispan.configuration.cache.Configuration;
+import org.infinispan.configuration.cache.ConfigurationBuilder;
+import org.infinispan.eviction.EvictionStrategy;
 import org.jboss.logging.Logger;
 
 @Singleton
@@ -16,13 +20,11 @@ public class InfinispanProvider {
 
 	private static final Logger logger = Logger.getLogger(InfinispanProvider.class);
 	
-	@Resource(lookup = "java:jboss/infinispan/container/myCache")
-	private CacheContainer cacheManager;
-	
-	@Produces 
+	@Produces
+	@ConfigureCache("MSTCache")
 	@MSTCache
-	public Cache<String, JsonObject> produceCache() {
-		logger.info("producing cache...");
-		return cacheManager.getCache("mst-cache");
+	public Configuration produceCache() {
+		logger.info("producing cache configuration...");
+		return new ConfigurationBuilder().eviction().strategy(EvictionStrategy.LRU).maxEntries(100).expiration().maxIdle(1, MINUTES).build();
 	}
 }
