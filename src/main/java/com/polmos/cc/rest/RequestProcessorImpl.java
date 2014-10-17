@@ -32,8 +32,12 @@ public class RequestProcessorImpl implements RequestProcessor {
     @Override
     public JsonObject processRequest(int id) throws IOException {
         logger.info("requested graphId:" + id);
-        return calculatedGraphs.getGraph(id);
+        return requestedDailyMST(id) ? calculatedGraphs.getDailyMST() : calculatedGraphs.getGraph(id);
     }
+
+	private boolean requestedDailyMST(int id) {
+		return id == -1;
+	}
     
     @Override
     public int processRequest(JsonObject reqBody, String type) throws IOException {

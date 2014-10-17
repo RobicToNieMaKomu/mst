@@ -19,6 +19,7 @@ public class CalculatedGraphs {
 	private Cache<Integer, JsonObject> calculatedGraphs;
 	
 	private final AtomicInteger id;
+	private JsonObject dailyMST;
 	
 	public CalculatedGraphs() {
 		this.id = new AtomicInteger(0);
@@ -32,5 +33,18 @@ public class CalculatedGraphs {
 
 	public JsonObject getGraph(int graphId) {
 		return calculatedGraphs.get(graphId);
+	}
+
+	public boolean putDailyMST(JsonObject mstGraph) {
+		boolean graphUpdated = false;
+		if (mstGraph != null) {
+			this.dailyMST = mstGraph;
+			graphUpdated = true;
+		}
+		return graphUpdated;
+	}
+
+	public JsonObject getDailyMST() {
+		return dailyMST;
 	}
 }
