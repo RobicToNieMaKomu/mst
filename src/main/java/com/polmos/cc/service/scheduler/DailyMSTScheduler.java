@@ -7,6 +7,7 @@ import java.util.Calendar;
 import java.util.Date;
 
 import javax.annotation.PostConstruct;
+import javax.annotation.Resource;
 import javax.ejb.Singleton;
 import javax.ejb.Startup;
 import javax.ejb.TransactionAttribute;
@@ -27,7 +28,7 @@ public class DailyMSTScheduler {
 	private static final int SUN = 1;
 	private static final int START_HOUR = 18;
 	
-	@Inject
+	@Resource
 	private ManagedScheduledExecutorService executorService;
 	
 	@Inject
