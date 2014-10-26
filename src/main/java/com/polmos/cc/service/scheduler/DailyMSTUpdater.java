@@ -23,7 +23,7 @@ public class DailyMSTUpdater implements Runnable {
 	private static final Logger LOG = Logger.getLogger(DailyMSTUpdater.class);
 	private static final String ALL_CURRENCIES_COMMA_SEPARATED = allCurrencies();
 	private static final List<String> ALL_CURRENCIES = toList(ALL_CURRENCIES_COMMA_SEPARATED);
-	private static final String URL_TO_TIME_SERIES = "http://front-comparator.rhcloud.com/rest/mst?type=ask&range=1&currencies=" + ALL_CURRENCIES_COMMA_SEPARATED;
+	private static final String URL_TO_TIME_SERIES = "http://cc-comparator.rhcloud.com/rest/mst?type=ask&range=1&currencies=" + ALL_CURRENCIES_COMMA_SEPARATED;
 	
 	@Inject
 	private RESTClient client;

@@ -55,7 +55,7 @@ public class DailyMSTUpdaterTest {
 	public void checkIfRESTClientIsProperlyCalled() {
 		mstUpdater.run();
 		
-		verify(client).sendGetRequest(eq("http://front-comparator.rhcloud.com/rest/mst?type=ask&range=1&currencies=" + ALL_CURRENCIES));
+		verify(client).sendGetRequest(eq("http://cc-comparator.rhcloud.com/rest/mst?type=ask&range=1&currencies=" + ALL_CURRENCIES));
 	}
 	
 	@Test
